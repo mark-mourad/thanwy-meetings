@@ -1,0 +1,679 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Thanwy Meetings API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: auth
+    description: Authentication
+  - name: dashboard
+    description: Role-specific dashboard summaries
+  - name: students
+    description: Student experiences
+  - name: servants
+    description: Servant experiences
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Invalid credentials
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Create a student account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: Created user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Log out
+      responses:
+        "204":
+          description: Logged out
+  /dashboard/student:
+    get:
+      operationId: getStudentDashboard
+      tags: [dashboard]
+      summary: Get the student dashboard
+      responses:
+        "200":
+          description: Student dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDashboard"
+  /dashboard/servant:
+    get:
+      operationId: getServantDashboard
+      tags: [dashboard]
+      summary: Get the servant dashboard
+      responses:
+        "200":
+          description: Servant dashboard
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServantDashboard"
+  /events:
+    get:
+      operationId: listEvents
+      tags: [students, servants]
+      summary: List relevant upcoming events
+      responses:
+        "200":
+          description: Events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+  /spiritual-records:
+    get:
+      operationId: listSpiritualRecords
+      tags: [students, servants]
+      summary: List spiritual records
+      parameters:
+        - name: studentId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Spiritual records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SpiritualRecord"
+    post:
+      operationId: createSpiritualRecord
+      tags: [students]
+      summary: Save a spiritual record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SpiritualRecordInput"
+      responses:
+        "201":
+          description: Created record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SpiritualRecord"
+  /bible-readings:
+    get:
+      operationId: listBibleReadings
+      tags: [students, servants]
+      summary: List Bible readings
+      parameters:
+        - name: studentId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [week, month, all, old, new]
+      responses:
+        "200":
+          description: Bible readings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BibleReading"
+    post:
+      operationId: createBibleReading
+      tags: [students]
+      summary: Record a Bible reading
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibleReadingInput"
+      responses:
+        "201":
+          description: Created reading
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibleReading"
+  /bible-readings/{id}:
+    patch:
+      operationId: updateBibleReading
+      tags: [students]
+      summary: Update a Bible reading
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibleReadingUpdate"
+      responses:
+        "200":
+          description: Updated reading
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibleReading"
+    delete:
+      operationId: deleteBibleReading
+      tags: [students]
+      summary: Delete a Bible reading
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Deleted reading
+  /bible-studies:
+    get:
+      operationId: listBibleStudies
+      tags: [students, servants]
+      summary: List Bible studies
+      responses:
+        "200":
+          description: Studies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BibleStudy"
+    post:
+      operationId: createBibleStudy
+      tags: [servants]
+      summary: Create a Bible study
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibleStudyInput"
+      responses:
+        "201":
+          description: Created study
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibleStudy"
+  /bible-studies/{id}:
+    get:
+      operationId: getBibleStudy
+      tags: [students, servants]
+      summary: Get a Bible study
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Study detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibleStudyDetail"
+  /bible-studies/{id}/submit:
+    post:
+      operationId: submitBibleStudy
+      tags: [students]
+      summary: Submit a Bible study
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibleStudySubmissionInput"
+      responses:
+        "200":
+          description: Submission
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibleStudySubmission"
+  /attendance:
+    get:
+      operationId: getAttendance
+      tags: [students, servants]
+      summary: Get attendance summary
+      parameters:
+        - name: studentId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Attendance summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceSummary"
+  /attendance/check-in:
+    post:
+      operationId: checkInStudent
+      tags: [servants]
+      summary: Check a student in using a QR token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckInInput"
+      responses:
+        "201":
+          description: Attendance record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttendanceRecord"
+  /servant/students:
+    get:
+      operationId: listClassStudents
+      tags: [servants]
+      summary: List students in the servant's class
+      responses:
+        "200":
+          description: Students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StudentSummary"
+  /servant/students/{id}:
+    get:
+      operationId: getStudentProfile
+      tags: [servants]
+      summary: Get a student profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Student profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentProfile"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" }
+        password: { type: string, minLength: 8 }
+    SignupInput:
+      type: object
+      required: [name, email, password, schoolYear, classId]
+      properties:
+        name: { type: string, minLength: 2 }
+        email: { type: string, pattern: "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$" }
+        password: { type: string, minLength: 8 }
+        schoolYear: { type: string }
+        classId: { type: string }
+    AuthUser:
+      type: object
+      required: [id, name, email, role, schoolYear, className]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        role: { type: string, enum: [STUDENT, SERVANT] }
+        schoolYear: { type: string }
+        className: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+    Event:
+      type: object
+      required: [id, title, type, date, day, startTime, endTime, location]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: ["string", "null"] }
+        type: { type: string }
+        date: { type: string }
+        day: { type: string }
+        startTime: { type: string }
+        endTime: { type: string }
+        location: { type: string }
+        status: { type: ["string", "null"] }
+    SpiritualRecord:
+      type: object
+      required: [id, date, morningPrayer, vespersPrayer, sleepPrayer, spontaneousPrayer, communion, confessionDate]
+      properties:
+        id: { type: string }
+        studentId: { type: string }
+        date: { type: string }
+        morningPrayer: { type: boolean }
+        vespersPrayer: { type: boolean }
+        sleepPrayer: { type: boolean }
+        spontaneousPrayer: { type: boolean }
+        communion: { type: boolean }
+        confessionDate: { type: ["string", "null"] }
+    SpiritualRecordInput:
+      type: object
+      required: [date, morningPrayer, vespersPrayer, sleepPrayer, spontaneousPrayer, communion]
+      properties:
+        date: { type: string }
+        morningPrayer: { type: boolean }
+        vespersPrayer: { type: boolean }
+        sleepPrayer: { type: boolean }
+        spontaneousPrayer: { type: boolean }
+        communion: { type: boolean }
+        confessionDate: { type: ["string", "null"] }
+    BibleReading:
+      type: object
+      required: [id, date, testament, book, chapter]
+      properties:
+        id: { type: string }
+        studentId: { type: string }
+        date: { type: string }
+        testament: { type: string }
+        book: { type: string }
+        chapter: { type: number, format: int32 }
+        note: { type: ["string", "null"] }
+    BibleReadingInput:
+      type: object
+      required: [date, testament, book, chapter]
+      properties:
+        date: { type: string }
+        testament: { type: string }
+        book: { type: string }
+        chapter: { type: number, format: int32, minimum: 1 }
+        note: { type: ["string", "null"] }
+    BibleReadingUpdate:
+      type: object
+      properties:
+        date: { type: string }
+        testament: { type: string }
+        book: { type: string }
+        chapter: { type: number, format: int32, minimum: 1 }
+        note: { type: ["string", "null"] }
+    BibleStudy:
+      type: object
+      required: [id, title, description, testament, book, chapter, startDate, deadline, status, submittedCount, totalStudents]
+      properties:
+        id: { type: string }
+        title: { type: string }
+        description: { type: string }
+        testament: { type: string }
+        book: { type: string }
+        chapter: { type: number, format: int32 }
+        startDate: { type: string }
+        deadline: { type: string }
+        status: { type: string }
+        submittedCount: { type: number, format: int32 }
+        totalStudents: { type: number, format: int32 }
+        submissionStatus: { type: ["string", "null"] }
+    BibleStudyQuestion:
+      type: object
+      required: [id, question, type, order]
+      properties:
+        id: { type: string }
+        question: { type: string }
+        type: { type: string, enum: [short, long, choice] }
+        options:
+          type: array
+          items: { type: string }
+        order: { type: number, format: int32 }
+    BibleStudyInput:
+      type: object
+      required: [title, description, testament, book, chapter, startDate, deadline, questions]
+      properties:
+        title: { type: string }
+        description: { type: string }
+        testament: { type: string }
+        book: { type: string }
+        chapter: { type: number, format: int32, minimum: 1 }
+        startDate: { type: string }
+        deadline: { type: string }
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/BibleStudyQuestionInput"
+    BibleStudyQuestionInput:
+      type: object
+      required: [question, type, order]
+      properties:
+        question: { type: string }
+        type: { type: string, enum: [short, long, choice] }
+        options:
+          type: array
+          items: { type: string }
+        order: { type: number, format: int32 }
+    BibleStudyDetail:
+      allOf:
+        - $ref: "#/components/schemas/BibleStudy"
+        - type: object
+          required: [questions]
+          properties:
+            questions:
+              type: array
+              items:
+                $ref: "#/components/schemas/BibleStudyQuestion"
+    BibleStudySubmissionInput:
+      type: object
+      required: [answers]
+      properties:
+        answers:
+          type: array
+          items:
+            type: object
+            required: [questionId, answer]
+            properties:
+              questionId: { type: string }
+              answer: { type: string }
+    BibleStudySubmission:
+      type: object
+      required: [id, studyId, submittedAt, status]
+      properties:
+        id: { type: string }
+        studyId: { type: string }
+        submittedAt: { type: string }
+        status: { type: string }
+    AttendanceSummary:
+      type: object
+      required: [percentage, attended, missed, total, records]
+      properties:
+        percentage: { type: number, format: int32 }
+        attended: { type: number, format: int32 }
+        missed: { type: number, format: int32 }
+        total: { type: number, format: int32 }
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttendanceRecord"
+    AttendanceRecord:
+      type: object
+      required: [id, eventId, eventTitle, studentId, studentName, status, date]
+      properties:
+        id: { type: string }
+        eventId: { type: string }
+        eventTitle: { type: string }
+        studentId: { type: string }
+        studentName: { type: string }
+        status: { type: string, enum: [present, absent] }
+        date: { type: string }
+        checkedInAt: { type: ["string", "null"] }
+    CheckInInput:
+      type: object
+      required: [eventId, qrToken]
+      properties:
+        eventId: { type: string }
+        qrToken: { type: string }
+    StudentSummary:
+      type: object
+      required: [id, name, attendancePercentage, spiritualPercentage, lastActivity]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        schoolYear: { type: string }
+        className: { type: string }
+        attendancePercentage: { type: number, format: int32 }
+        spiritualPercentage: { type: number, format: int32 }
+        lastActivity: { type: string }
+        avatarUrl: { type: ["string", "null"] }
+    StudentProfile:
+      allOf:
+        - $ref: "#/components/schemas/StudentSummary"
+        - type: object
+          required: [readings, spiritualRecords, studies]
+          properties:
+            readings:
+              type: array
+              items: { $ref: "#/components/schemas/BibleReading" }
+            spiritualRecords:
+              type: array
+              items: { $ref: "#/components/schemas/SpiritualRecord" }
+            studies:
+              type: array
+              items: { $ref: "#/components/schemas/BibleStudy" }
+    StudentDashboard:
+      type: object
+      required: [user, events, spiritual, readings, studies, attendance]
+      properties:
+        user: { $ref: "#/components/schemas/AuthUser" }
+        events:
+          type: array
+          items: { $ref: "#/components/schemas/Event" }
+        spiritual:
+          type: object
+          required: [completed, total, lastConfession, latest]
+          properties:
+            completed: { type: number, format: int32 }
+            total: { type: number, format: int32 }
+            lastConfession: { type: ["string", "null"] }
+            latest: { $ref: "#/components/schemas/SpiritualRecord" }
+        readings:
+          type: array
+          items: { $ref: "#/components/schemas/BibleReading" }
+        studies:
+          type: array
+          items: { $ref: "#/components/schemas/BibleStudy" }
+        attendance: { $ref: "#/components/schemas/AttendanceSummary" }
+    ServantDashboard:
+      type: object
+      required: [user, events, students, attendance, studies, recentActivity]
+      properties:
+        user: { $ref: "#/components/schemas/AuthUser" }
+        events:
+          type: array
+          items: { $ref: "#/components/schemas/Event" }
+        students:
+          type: array
+          items: { $ref: "#/components/schemas/StudentSummary" }
+        attendance: { $ref: "#/components/schemas/AttendanceSummary" }
+        studies:
+          type: array
+          items: { $ref: "#/components/schemas/BibleStudy" }
+        recentActivity:
+          type: array
+          items:
+            type: object
+            required: [id, title, time]
+            properties:
+              id: { type: string }
+              title: { type: string }
+              description: { type: string }
+              time: { type: string }
+
