@@ -1,0 +1,1852 @@
+# Thanwy Meetings — Full-Stack Web Application
+
+Build a complete production-ready web application called **"Thanwy Meetings"** for managing and tracking Sunday School students ("مخدومين") and servants ("خدام").
+
+The application must be **Arabic-first, RTL, mobile-first**, modern, responsive, and easy to use.
+
+The attached screenshots are **visual references**, not exact pixel-perfect requirements. Use them to understand the desired structure, spacing, hierarchy, cards, dashboard composition, and mobile-app feeling.
+
+The uploaded `DESIGN.md` file is the primary source for the visual design system and must be followed.
+
+---
+
+# 1. PRODUCT CONCEPT
+
+The website has two main user roles:
+
+1. **مخدوم — Student**
+2. **خادم — Servant**
+
+Both roles use the same login system, but after authentication the application must automatically load the correct dashboard based on the user's role.
+
+The goal of the application is to allow:
+
+### Students
+
+* Create an account.
+* Select their school year.
+* Select their Sunday School class.
+* View their upcoming meetings/events.
+* View their spiritual activity.
+* Record their prayers.
+* Record Bible readings.
+* View Bible study assignments.
+* Submit Bible studies.
+* View attendance.
+* Use their personal QR code for attendance.
+
+### Servants
+
+* Receive an invitation/signup link from the system.
+* Create a servant account.
+* Select the school year and class they serve.
+* View all students belonging to their class.
+* Track attendance.
+* Scan student QR codes.
+* View individual student profiles.
+* Monitor spiritual activities.
+* Monitor Bible readings.
+* Create Bible study assignments.
+* Track assignment submissions.
+* Manage/view upcoming events.
+
+---
+
+# 2. TECHNOLOGY
+
+Use a modern full-stack architecture.
+
+Preferred stack:
+
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* Node.js
+* Express
+* PostgreSQL
+* Prisma ORM
+* JWT/session-based authentication
+* REST API
+* QR code generation/scanning library
+* Lucide React or Material Symbols Rounded for icons
+
+If the environment already provides an equivalent stack, use the existing stack rather than unnecessarily replacing it.
+
+The application must have:
+
+* Frontend
+* Backend
+* Database
+* Authentication
+* Role-based authorization
+* API layer
+* Persistent data
+* Form validation
+* Error handling
+* Loading states
+* Empty states
+* Responsive design
+
+Do NOT build this as a static frontend mockup.
+
+All important data must be stored in the database.
+
+---
+
+# 3. LANGUAGE & RTL
+
+The primary language is Arabic.
+
+Set:
+
+```html
+<html lang="ar" dir="rtl">
+```
+
+All primary UI text must be Arabic.
+
+The layout must be properly RTL, including:
+
+* Forms
+* Cards
+* Navigation
+* Tables
+* Dropdowns
+* Modals
+* Icons
+* Breadcrumbs
+* Dashboards
+
+English may be used internally for code, database fields, API names, etc.
+
+Do not create fake RTL by simply aligning text to the right.
+
+---
+
+# 4. DESIGN SYSTEM
+
+Follow the uploaded `DESIGN.md`.
+
+The visual identity is:
+
+* Modern
+* Youth-focused
+* Premium
+* Dark
+* Dynamic
+* Community-oriented
+* Spiritual without looking old-fashioned
+* Mobile-app inspired
+* Spotify-inspired dark UI
+* Material Design 3 structure
+* Glassmorphism where appropriate
+
+The design system explicitly uses a dark background, vibrant red and green accents, RTL support, rounded containers, and mobile-first spacing.
+
+## Core Colors
+
+Use these exact colors:
+
+```text
+Background:
+#121414
+
+Surface:
+#1E2020
+
+Surface Low:
+#1A1C1C
+
+Surface High:
+#282A2B
+
+Surface Highest:
+#333535
+
+Text:
+#E2E2E2
+
+Secondary Text:
+#A0A0A0
+
+Primary Red:
+#FFB4AA
+
+Primary Red Container:
+#E61919
+
+Secondary Green:
+#4EE62F
+
+Secondary Green Container:
+#29C902
+
+Tertiary Blue:
+#A1C9FF
+
+Tertiary Blue Container:
+#0077CD
+
+Outline:
+#AE8782
+```
+
+The uploaded design file defines the full color palette.
+
+---
+
+# 5. TYPOGRAPHY
+
+Use:
+
+**Be Vietnam Pro**
+
+Support Arabic properly.
+
+Typography should follow the uploaded design system.
+
+Use approximately:
+
+```text
+Headline Large:
+32px / 700
+
+Headline Medium:
+24px / 600
+
+Title Large:
+20px / 600
+
+Body Large:
+16px / 400
+
+Body Medium:
+14px / 400
+
+Label:
+12px / 500
+```
+
+Mobile headline:
+
+```text
+28px / 700
+```
+
+The uploaded design system specifies Be Vietnam Pro and Arabic-specific rendering requirements.
+
+---
+
+# 6. SHAPE LANGUAGE
+
+Use rounded modern containers.
+
+```text
+Small radius: 4px
+Default: 8px
+Medium: 12px
+Large: 16px
+XL: 24px
+Buttons: 9999px
+```
+
+Cards and inputs should generally use:
+
+```text
+border-radius: 16px
+```
+
+Large dashboard surfaces can use:
+
+```text
+border-radius: 24px
+```
+
+Buttons should be pill-shaped.
+
+The design system specifically calls for 16px cards/inputs, 24px large surfaces, and fully rounded buttons.
+
+---
+
+# 7. LAYOUT
+
+The application is primarily a mobile web application.
+
+Use:
+
+```text
+Mobile-first
+20px horizontal page margins
+8px spacing rhythm
+16px standard card gaps
+24px section gaps
+80px bottom navigation safe area
+```
+
+The bottom navigation must be fixed.
+
+Content must never be hidden behind the bottom navigation.
+
+Follow the mobile-first spacing and safe-area rules from the design system.
+
+On desktop/tablet, expand the layout intelligently rather than simply stretching the mobile UI.
+
+---
+
+# 8. AUTHENTICATION
+
+## Login Page
+
+Create a beautiful Arabic RTL login screen.
+
+Structure:
+
+* Thanwy Meetings logo
+* Welcome message
+* Short subtitle
+* Email input
+* Password input
+* Show/hide password icon
+* "نسيت كلمة المرور؟"
+* Primary login button
+* "ليس لديك حساب؟ إنشاء حساب"
+
+Use the attached login screenshot as the visual reference.
+
+The login page is shared between:
+
+* Student
+* Servant
+
+After login, redirect based on role.
+
+---
+
+# 9. STUDENT SIGNUP
+
+Students can create their own accounts.
+
+Fields:
+
+1. Full name
+2. Email
+3. Password
+4. Re-enter password
+5. School year
+6. Sunday School class
+
+School year dropdown:
+
+```text
+أولى سنوي
+تانية سنوي
+تالتة سنوي
+```
+
+The class dropdown must be **dynamic**.
+
+Do not display all classes at once.
+
+---
+
+## First Year Classes
+
+If the student selects:
+
+**أولى سنوي**
+
+show:
+
+```text
+البابا ديسكوروس
+البابا بطرس
+البابا كرولوس
+عمود الدين
+البابا أثناسيوس
+البابا ألكساندروس
+```
+
+---
+
+## Second Year Classes
+
+If the student selects:
+
+**تانية سنوي**
+
+show:
+
+```text
+القديس بوليكاربوس
+القديس تيتوس
+القديس تيموثاوس
+القديس أغنوتيوس
+القديس إكليمنوس
+```
+
+---
+
+## Third Year Classes
+
+If the student selects:
+
+**تالتة سنوي**
+
+show:
+
+```text
+فصل داود النبي
+إليان النبي
+موسى النبي
+يعقوب التائب
+القديس أوستينوس
+```
+
+Use the names exactly as provided.
+
+The class dropdown must reset when the school year changes.
+
+---
+
+# 10. SERVANT ACCOUNT
+
+Servants must NOT use the public student signup flow.
+
+Instead, the system must support an **invitation link**.
+
+A servant receives a unique invitation link.
+
+Example conceptual flow:
+
+```text
+Admin/System
+      ↓
+Generate servant invitation
+      ↓
+Send invitation link
+      ↓
+Servant opens link
+      ↓
+Creates account
+      ↓
+Chooses:
+- Name
+- Email
+- Password
+- School year
+- Class
+      ↓
+Account role = SERVANT
+```
+
+The invitation token must be secure, unique, and expire after a configurable amount of time.
+
+Do not allow users to manipulate the URL to turn a student account into a servant account.
+
+Role must be stored and validated server-side.
+
+---
+
+# 11. USER ROLES
+
+Implement proper role-based authorization.
+
+```text
+STUDENT
+SERVANT
+```
+
+Never rely only on frontend checks.
+
+Backend APIs must verify the user's role.
+
+Example:
+
+```text
+Student:
+Can access own data.
+
+Servant:
+Can access students belonging to their assigned class.
+
+Student cannot access:
+- Other students
+- Servant dashboard
+- Class-wide statistics
+- Assignment creation
+- Attendance management
+
+Servant cannot access:
+- Students from unrelated classes
+```
+
+---
+
+# 12. STUDENT DASHBOARD
+
+After login, the student sees the main dashboard.
+
+Use the attached student dashboard screenshot as the main visual reference.
+
+The dashboard should contain:
+
+---
+
+## Student Header
+
+At the top:
+
+* Student name
+* School year
+* Class
+* Personal information
+* Personal QR code
+
+Example:
+
+```text
+مينا شنودة
+الثالث الثانوي
+القديس بوليكاربوس
+```
+
+The QR code should represent the authenticated student.
+
+Provide a visually clean profile header/card.
+
+The attached screenshot uses a light-blue profile/QR area. Keep this concept, while adapting it to the design system.
+
+---
+
+# 13. UPCOMING EVENTS
+
+Create an:
+
+**الفعاليات القادمة**
+
+section.
+
+Events may include:
+
+* اجتماع
+* نشاط
+* يوم ترفيهي
+* رحلة
+* أي فعالية أخرى
+
+Each event should show:
+
+```text
+اسم الفعالية
+نوع الفعالية
+التاريخ
+اليوم
+وقت البداية
+وقت النهاية
+المكان
+```
+
+Example:
+
+```text
+الاجتماع الأسبوعي
+
+الأحد، 20 أغسطس
+من 6:00 م إلى 8:00 م
+فصل القديس ...
+```
+
+Cards should be compact and visually attractive.
+
+Use status indicators where useful.
+
+---
+
+# 14. SPIRITUAL POINT
+
+Create a dashboard section:
+
+**النقطة الروحية**
+
+This dashboard section is primarily a read-only summary.
+
+It displays the student's previously recorded activities.
+
+Track:
+
+```text
+باكر
+غروب
+نوم
+ارتجالي
+تناول
+آخر اعتراف
+```
+
+The home dashboard should NOT require the student to edit these values directly.
+
+Instead, show the latest recorded data.
+
+Example:
+
+```text
+باكر     ✓
+غروب     ✓
+نوم      ✓
+ارتجالي  ✓
+تناول    ✓
+
+آخر اعتراف:
+15 أغسطس 2026
+```
+
+---
+
+# 15. SPIRITUAL NOTES PAGE
+
+Add a navigation item:
+
+**النقطة الروحية**
+
+This page allows the student to record spiritual activities.
+
+Create a weekly grid/table.
+
+Example:
+
+```text
+             الأحد  الإثنين  الثلاثاء  الأربعاء  الخميس  الجمعة  السبت
+
+باكر           □       □        □         □        □       □       □
+غروب           □       □        □         □        □       □       □
+نوم            □       □        □         □        □       □       □
+ارتجالي        □       □        □         □        □       □       □
+```
+
+The student can check the prayers they completed.
+
+Use animated checkboxes/toggles.
+
+When checked:
+
+* Save immediately or through an explicit save action.
+* Show green success state.
+* Provide clear feedback.
+
+Also allow recording:
+
+```text
+تناول
+آخر اعتراف
+```
+
+Use proper date pickers.
+
+The interface should feel like a friendly weekly tracker, not an Excel spreadsheet.
+
+---
+
+# 16. BIBLE READING
+
+Create a navigation item:
+
+**الكتاب المقدس**
+
+This page allows the student to record Bible readings.
+
+The student chooses:
+
+1. Date
+2. Testament
+3. Book
+4. Chapter
+5. Optional note
+
+---
+
+## Testament
+
+Dropdown:
+
+```text
+العهد القديم
+العهد الجديد
+```
+
+When the user selects the testament, dynamically show the relevant books.
+
+---
+
+# 17. BIBLE DATABASE
+
+Implement a structured Bible metadata dataset containing:
+
+* Old Testament books
+* New Testament books
+* Number of chapters for every book
+
+Do NOT require the user to manually type book names.
+
+The flow must be:
+
+```text
+اختار التاريخ
+↓
+اختار العهد
+↓
+اختار السفر
+↓
+اختار الإصحاح
+↓
+أضف ملاحظة اختيارية
+↓
+حفظ القراءة
+```
+
+The chapter dropdown must dynamically depend on the selected book.
+
+Example:
+
+```text
+إنجيل متى
+الإصحاح 1
+الإصحاح 2
+الإصحاح 3
+...
+```
+
+The system only needs Bible metadata and chapter structure for this feature; it does not need to reproduce the full Bible text.
+
+---
+
+# 18. BIBLE READING HISTORY
+
+The student must be able to see previous readings.
+
+Each record shows:
+
+```text
+التاريخ
+العهد
+السفر
+الإصحاح
+الملاحظة
+```
+
+Allow:
+
+* View
+* Edit
+* Delete
+
+with confirmation for deletion.
+
+The home dashboard should show a summarized version of recent readings.
+
+---
+
+# 19. BIBLE STUDY
+
+Create a section:
+
+**دراسة الكتاب**
+
+This represents assignments created by servants.
+
+Each assignment should contain:
+
+```text
+Title
+Description
+Testament
+Book
+Chapter
+Creation date
+Deadline
+Status
+Submission
+```
+
+The student dashboard should show:
+
+```text
+الأسبوع الأول
+
+العهد الجديد
+إنجيل ...
+الإصحاح ...
+
+موعد التسليم:
+بعد 3 أيام
+
+الحالة:
+لم يتم التسليم
+```
+
+Once submitted:
+
+```text
+تم التسليم
+```
+
+Use strong visual status indicators.
+
+For example:
+
+* Green = submitted
+* Red = overdue
+* Yellow/orange = deadline approaching
+* Neutral = pending
+
+---
+
+# 20. BIBLE STUDY SUBMISSION
+
+Students should be able to open an assignment and submit their answers.
+
+The assignment page should contain:
+
+* Title
+* Description
+* Scripture reference
+* Questions
+* Answer fields
+* Submit button
+
+After submission:
+
+* Lock submission if configured
+* Display submission date
+* Display status
+* Allow editing only if the servant permits it
+
+Do not fake submission data.
+
+Persist everything in the database.
+
+---
+
+# 21. ATTENDANCE — STUDENT
+
+Create a navigation item:
+
+**الحضور**
+
+Student attendance page should display:
+
+* Attendance percentage
+* Number of attended events
+* Number of missed events
+* Upcoming events
+* Student QR code
+
+The QR code is used by the servant to record attendance.
+
+Show useful visual statistics.
+
+Example:
+
+```text
+نسبة الحضور
+
+87%
+
+حضرت:
+13 اجتماع
+
+غيبت:
+2 اجتماعات
+```
+
+---
+
+# 22. QR ATTENDANCE SYSTEM
+
+Implement a real QR attendance system.
+
+Each student has a unique QR code.
+
+The servant can scan the student's QR code during an event.
+
+QR payload should contain a secure student identifier/token, not sensitive personal information.
+
+When scanned:
+
+```text
+Validate authenticated servant
+↓
+Validate student
+↓
+Validate servant's class
+↓
+Validate selected event
+↓
+Prevent duplicate attendance
+↓
+Create attendance record
+```
+
+Do not allow students to mark themselves present by modifying frontend requests.
+
+Attendance must be validated server-side.
+
+---
+
+# 23. SERVANT DASHBOARD
+
+The servant dashboard should be similar in overall visual language to the student dashboard, but with management functionality.
+
+Top header:
+
+```text
+اسم الخادم
+المرحلة السنوية
+الفصل
+```
+
+Example:
+
+```text
+الخادم: مينا ...
+المرحلة: تانية سنوي
+الفصل: القديس بوليكاربوس
+```
+
+Show:
+
+* Upcoming events
+* Class statistics
+* Attendance summary
+* Students count
+* Bible study assignments
+* Recent activity
+
+---
+
+# 24. SERVANT NAVIGATION
+
+Servant navigation should contain:
+
+```text
+الرئيسية
+متابعة الحضور
+متابعة النقطة الروحية
+متابعة القراءات
+دراسة الكتاب
+```
+
+Add other navigation items only when genuinely useful.
+
+Do not overcrowd the bottom navigation.
+
+On desktop, the navigation can transform into a sidebar.
+
+---
+
+# 25. SERVANT — ATTENDANCE MANAGEMENT
+
+Create:
+
+**متابعة الحضور**
+
+The servant can:
+
+1. Select an event.
+2. Scan student QR codes.
+3. See students who attended.
+4. See students who did not attend.
+5. View attendance percentage.
+6. Open individual student profiles.
+
+Dashboard example:
+
+```text
+الاجتماع الأسبوعي
+
+الحضور:
+18 / 22
+
+نسبة الحضور:
+82%
+
+حاضر:
+18
+
+غائب:
+4
+```
+
+Include a QR scanner interface.
+
+Also provide a student list for the selected class.
+
+Each student row:
+
+```text
+اسم المخدوم
+حالة الحضور
+نسبة الحضور
+```
+
+---
+
+# 26. SERVANT — STUDENT PROFILE
+
+When the servant selects a student, open a detailed profile.
+
+Show:
+
+```text
+اسم المخدوم
+المرحلة
+الفصل
+
+نسبة الحضور
+
+النقطة الروحية
+
+قراءات الكتاب
+
+دراسات الكتاب
+
+آخر الأنشطة
+```
+
+The servant should be able to understand the student's overall progress from one page.
+
+---
+
+# 27. SERVANT — SPIRITUAL TRACKING
+
+Create:
+
+**متابعة النقطة الروحية**
+
+The servant first selects a student.
+
+Then display the student's weekly spiritual tracker.
+
+Example:
+
+```text
+             الأحد الإثنين الثلاثاء الأربعاء الخميس الجمعة السبت
+
+باكر
+غروب
+نوم
+ارتجالي
+```
+
+The servant should be able to view the student's recorded data.
+
+Unless explicitly required, do not allow the servant to fabricate records on behalf of the student.
+
+Clearly distinguish:
+
+```text
+Recorded by student
+```
+
+from any servant/admin-entered data.
+
+---
+
+# 28. SERVANT — BIBLE READING TRACKING
+
+Create:
+
+**متابعة القراءات**
+
+The servant selects a student.
+
+Display:
+
+* Reading history
+* Date
+* Testament
+* Book
+* Chapter
+* Notes
+* Weekly progress
+
+Provide filters:
+
+```text
+هذا الأسبوع
+هذا الشهر
+كل القراءات
+العهد القديم
+العهد الجديد
+```
+
+---
+
+# 29. SERVANT — CREATE BIBLE STUDY
+
+Create a prominent action:
+
+**إضافة دراسة كتاب**
+
+This can be a FAB or primary action.
+
+The servant can create an assignment.
+
+Fields:
+
+```text
+عنوان الدراسة
+الوصف
+العهد
+السفر
+الإصحاح
+تاريخ البداية
+موعد التسليم
+الأسئلة
+```
+
+The book/chapter selection must use the same Bible metadata system.
+
+The servant can create multiple questions.
+
+Question types can initially be:
+
+* Short text answer
+* Long text answer
+* Multiple choice
+
+Store all questions and answers in the database.
+
+---
+
+# 30. SERVANT — BIBLE STUDY TRACKING
+
+The servant must be able to see:
+
+```text
+عدد الطلاب
+عدد من سلموا
+عدد من لم يسلموا
+نسبة التسليم
+```
+
+Example:
+
+```text
+دراسة الأسبوع الأول
+
+تم التسليم:
+15 / 20
+
+75%
+```
+
+The servant can open the assignment and see each student's status.
+
+---
+
+# 31. EVENTS
+
+Create an event management data model.
+
+Event fields:
+
+```text
+id
+title
+description
+type
+date
+startTime
+endTime
+location
+targetYear
+targetClass
+createdBy
+```
+
+Event types:
+
+```text
+اجتماع
+نشاط
+يوم ترفيهي
+رحلة
+أخرى
+```
+
+Students should only see events relevant to their assigned class/year.
+
+---
+
+# 32. DATABASE MODEL
+
+Create proper relational database models.
+
+At minimum:
+
+### User
+
+```text
+id
+name
+email
+passwordHash
+role
+schoolYear
+classId
+createdAt
+updatedAt
+```
+
+### Class
+
+```text
+id
+name
+schoolYear
+```
+
+### ServantInvitation
+
+```text
+id
+token
+email
+expiresAt
+usedAt
+createdBy
+```
+
+### Event
+
+```text
+id
+title
+description
+type
+date
+startTime
+endTime
+location
+schoolYear
+classId
+createdBy
+```
+
+### Attendance
+
+```text
+id
+eventId
+studentId
+checkedInAt
+checkedInBy
+```
+
+Prevent duplicate attendance for the same:
+
+```text
+student + event
+```
+
+### SpiritualRecord
+
+```text
+id
+studentId
+date
+morningPrayer
+vespersPrayer
+sleepPrayer
+spontaneousPrayer
+communion
+confessionDate
+```
+
+### BibleReading
+
+```text
+id
+studentId
+date
+testament
+book
+chapter
+note
+```
+
+### BibleStudy
+
+```text
+id
+title
+description
+testament
+book
+chapter
+startDate
+deadline
+createdBy
+```
+
+### BibleStudyQuestion
+
+```text
+id
+studyId
+question
+type
+options
+order
+```
+
+### BibleStudySubmission
+
+```text
+id
+studyId
+studentId
+submittedAt
+status
+```
+
+### BibleStudyAnswer
+
+```text
+id
+submissionId
+questionId
+answer
+```
+
+---
+
+# 33. SECURITY
+
+Implement real security.
+
+Requirements:
+
+* Password hashing
+* Secure authentication
+* HTTP-only cookies if using cookie sessions
+* CSRF protection where applicable
+* Server-side role authorization
+* Input validation
+* Rate limiting for login
+* Secure invitation tokens
+* No sensitive data in QR codes
+* Prevent IDOR vulnerabilities
+* Prevent students from accessing another student's records
+* Prevent students from accessing servant endpoints
+* Validate all ownership/class relationships server-side
+
+Never trust:
+
+```text
+role
+studentId
+classId
+attendance status
+```
+
+from the frontend.
+
+---
+
+# 34. UI COMPONENTS
+
+Create reusable components.
+
+Examples:
+
+```text
+Button
+Input
+PasswordInput
+Select
+DatePicker
+Modal
+BottomNavigation
+TopBar
+Card
+EventCard
+StudentCard
+AttendanceCard
+ProgressBar
+QRCodeCard
+EmptyState
+LoadingState
+ErrorState
+Toast
+ConfirmDialog
+WeeklyTracker
+BibleBookSelector
+BibleChapterSelector
+StudyCard
+```
+
+Do not duplicate UI code unnecessarily.
+
+---
+
+# 35. BOTTOM NAVIGATION
+
+Student:
+
+```text
+الرئيسية
+النقطة الروحية
+الكتاب المقدس
+الحضور
+```
+
+Servant:
+
+```text
+الرئيسية
+الحضور
+النقطة الروحية
+القراءات
+دراسة الكتاب
+```
+
+Use rounded Material-style icons.
+
+The design system specifies a 4–5 icon bottom navigation and active red/green tinting.
+
+---
+
+# 36. GLASSMORPHISM
+
+Use glassmorphism carefully.
+
+Good places:
+
+* Bottom navigation
+* Top bars
+* Floating elements
+* Modals
+* Overlays
+
+Use:
+
+```css
+backdrop-filter: blur(20px);
+```
+
+with semi-transparent dark surfaces.
+
+Do not use glassmorphism on every card.
+
+Cards should primarily use tonal layering.
+
+This follows the uploaded design system's elevation and glassmorphism rules.
+
+---
+
+# 37. ANIMATIONS
+
+Use subtle animations.
+
+Examples:
+
+* Page transitions
+* Card hover
+* Button press
+* Checkbox completion
+* Progress updates
+* Modal opening
+* Navigation transitions
+
+Pressed cards may scale approximately:
+
+```text
+98%
+```
+
+Avoid excessive animations.
+
+The design system specifically recommends subtle interaction scaling rather than heavy shadows.
+
+---
+
+# 38. RESPONSIVE DESIGN
+
+The app must work on:
+
+* Mobile
+* Tablet
+* Laptop
+* Desktop
+
+Mobile should feel like the primary product.
+
+On desktop:
+
+* Center the mobile-style application when appropriate, OR
+* Use a wider dashboard layout.
+* Convert bottom navigation into a sidebar for management-heavy servant screens when appropriate.
+
+Do not make the desktop UI look like a stretched mobile phone.
+
+---
+
+# 39. EMPTY STATES
+
+Every page must have a useful empty state.
+
+Examples:
+
+No readings:
+
+```text
+لسه مفيش قراءات مسجلة
+ابدأ بتسجيل أول قراءة ليك.
+```
+
+No Bible studies:
+
+```text
+مفيش دراسات كتاب متاحة حالياً.
+```
+
+No upcoming events:
+
+```text
+مفيش فعاليات قادمة حالياً.
+```
+
+No attendance:
+
+```text
+لسه مفيش بيانات حضور.
+```
+
+Never leave a blank white/dark area without explanation.
+
+---
+
+# 40. LOADING STATES
+
+Use skeleton loaders for:
+
+* Dashboard
+* Student lists
+* Events
+* Attendance
+* Bible readings
+* Bible studies
+
+Avoid showing empty UI while data is loading.
+
+---
+
+# 41. ERROR HANDLING
+
+Show friendly Arabic error messages.
+
+Examples:
+
+```text
+البريد الإلكتروني أو كلمة المرور غير صحيحة.
+
+حصلت مشكلة، حاول مرة تانية.
+
+مش مسموح لك تدخل الصفحة دي.
+
+الرابط غير صالح أو انتهت صلاحيته.
+
+تم تسجيل الحضور بالفعل.
+```
+
+Do not expose technical backend errors to users.
+
+---
+
+# 42. FORM VALIDATION
+
+Validate:
+
+* Required fields
+* Email format
+* Password strength
+* Password confirmation
+* Valid school year
+* Valid class
+* Valid dates
+* Valid Bible book/chapter
+* Assignment deadline
+* Invitation expiration
+
+Show validation errors near the relevant field.
+
+---
+
+# 43. ACCESSIBILITY
+
+Use:
+
+* Proper labels
+* Keyboard navigation
+* Accessible buttons
+* ARIA where necessary
+* Good contrast
+* Large touch targets
+* Visible focus states
+
+All interactive elements should be usable on mobile.
+
+---
+
+# 44. LOGO
+
+The Thanwy Meetings logo provided by the user should be used.
+
+Do not recreate or redesign the logo unnecessarily.
+
+Create a reusable logo component:
+
+```text
+<ThanwyLogo />
+```
+
+Allow the actual logo asset to be placed in:
+
+```text
+/public/assets/
+```
+
+Use the logo consistently on authentication pages and appropriate branding areas.
+
+---
+
+# 45. DEVELOPMENT APPROACH
+
+Build the application in stages.
+
+## Phase 1
+
+Set up:
+
+* Project
+* React
+* TypeScript
+* Tailwind
+* Routing
+* RTL
+* Theme
+* Typography
+* Components
+
+## Phase 2
+
+Implement:
+
+* Database
+* Authentication
+* Student signup
+* Servant invitation
+* Login
+* Role-based routing
+
+## Phase 3
+
+Implement student dashboard:
+
+* Events
+* Spiritual summary
+* Bible readings
+* Bible studies
+* Attendance
+* QR code
+
+## Phase 4
+
+Implement student interaction:
+
+* Spiritual tracker
+* Bible reading creation
+* Bible reading history
+* Bible study submission
+* Attendance history
+
+## Phase 5
+
+Implement servant dashboard:
+
+* Student list
+* Attendance
+* QR scanning
+* Student profiles
+* Spiritual tracking
+* Bible reading tracking
+
+## Phase 6
+
+Implement:
+
+* Bible study creation
+* Questions
+* Submissions
+* Tracking
+
+## Phase 7
+
+Security and testing.
+
+---
+
+# 46. TEST DATA
+
+Create seed/demo data for development.
+
+Include:
+
+* Multiple school years
+* Multiple classes
+* Several students
+* Several servants
+* Upcoming events
+* Attendance records
+* Spiritual records
+* Bible readings
+* Bible studies
+* Study submissions
+
+Clearly mark demo accounts if necessary.
+
+Do not hardcode fake dashboard information directly into React components.
+
+Dashboard data must come from the API/database.
+
+---
+
+# 47. IMPORTANT UX RULES
+
+The application should feel:
+
+```text
+Simple
+Fast
+Friendly
+Modern
+Youthful
+Organized
+Premium
+```
+
+Avoid:
+
+* Huge forms
+* Crowded screens
+* Too many colors
+* Excessive shadows
+* Tiny text
+* Generic Bootstrap-looking UI
+* Plain HTML tables
+* Desktop-first layouts
+* Excessive glassmorphism
+* Random gradients
+* Unnecessary animations
+
+Use cards, sections, progressive disclosure, and clear hierarchy.
+
+---
+
+# 48. DESIGN REFERENCE
+
+The four attached screenshots should be treated as references for:
+
+* Login screen
+* Signup screen
+* Student dashboard
+* Servant dashboard
+
+Do not copy the screenshots blindly.
+
+Instead, preserve their general information hierarchy while improving:
+
+* UX
+* responsiveness
+* spacing
+* typography
+* accessibility
+* consistency
+* component reusability
+
+The uploaded design system should override any conflicting visual decisions in the screenshots.
+
+---
+
+# 49. FINAL QUALITY REQUIREMENT
+
+Before considering the project complete, verify:
+
+### Authentication
+
+* Student signup works.
+* Servant invitation works.
+* Login works.
+* Logout works.
+* Password validation works.
+* Role routing works.
+
+### Student
+
+* Dashboard works.
+* Events display correctly.
+* Spiritual tracker works.
+* Bible reading creation works.
+* Bible reading history works.
+* Bible study display works.
+* Bible study submission works.
+* Attendance displays correctly.
+* QR code works.
+
+### Servant
+
+* Dashboard works.
+* Student list works.
+* Event attendance works.
+* QR scanner works.
+* Student profile works.
+* Spiritual tracking works.
+* Bible reading tracking works.
+* Bible study creation works.
+* Bible study submission tracking works.
+
+### Security
+
+* Students cannot access other students' data.
+* Students cannot access servant features.
+* Servants can only access their assigned class.
+* QR attendance cannot be spoofed through frontend manipulation.
+* Duplicate attendance is prevented.
+* Invitation tokens expire.
+* Passwords are never stored in plaintext.
+
+---
+
+# 50. MOST IMPORTANT INSTRUCTION
+
+Do NOT build only a visual prototype.
+
+Build a **real full-stack application with a real database, authentication, APIs, role-based authorization, persistent data, and reusable components.**
+
+Start by creating the complete project structure and core design system.
+
+Then implement authentication and database models.
+
+Then implement the student experience.
+
+Then implement the servant experience.
+
+Keep the code clean, modular, maintainable, and easy to modify later.
+
+If a feature is not completely specified, choose the simplest professional UX that fits the existing design system instead of inventing unnecessary functionality.
+
+The final result should feel like a polished Arabic mobile-first Sunday School management platform called:
+
+# "Thanwy Meetings"
