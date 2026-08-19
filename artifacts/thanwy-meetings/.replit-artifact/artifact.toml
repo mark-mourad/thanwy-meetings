@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Thanwy Meetings"
+description = "Arabic-first RTL Sunday School meeting management for students and servants, with dashboards, attendance, spiritual tracking, Bible readings, and study assignments."
+version = "1.0.0"
+id = "artifacts/thanwy-meetings"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24092
+
+[services.development]
+run = "pnpm --filter @workspace/thanwy-meetings run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/thanwy-meetings", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/thanwy-meetings/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24092"
+BASE_PATH = "/"
